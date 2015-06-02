@@ -8,17 +8,16 @@ import Button from './Button';
 import ButtonGroup from './ButtonGroup';
 import ButtonInput from './ButtonInput';
 import ButtonToolbar from './ButtonToolbar';
-import CollapsableNav from './CollapsableNav';
 import CollapsibleNav from './CollapsibleNav';
 import Carousel from './Carousel';
 import CarouselItem from './CarouselItem';
 import Col from './Col';
-import CollapsableMixin from './CollapsableMixin';
 import CollapsibleMixin from './CollapsibleMixin';
 import DropdownButton from './DropdownButton';
 import DropdownMenu from './DropdownMenu';
 import DropdownStateMixin from './DropdownStateMixin';
 import FadeMixin from './FadeMixin';
+import FormControls from './FormControls';
 import Glyphicon from './Glyphicon';
 import Grid from './Grid';
 import Input from './Input';
@@ -50,6 +49,7 @@ import Table from './Table';
 import TabPane from './TabPane';
 import Thumbnail from './Thumbnail';
 import Tooltip from './Tooltip';
+import utils from './utils';
 import Well from './Well';
 import styleMaps from './styleMaps';
 
@@ -64,17 +64,16 @@ export default {
   ButtonGroup,
   ButtonInput,
   ButtonToolbar,
-  CollapsableNav,
   CollapsibleNav,
   Carousel,
   CarouselItem,
   Col,
-  CollapsableMixin,
   CollapsibleMixin,
   DropdownButton,
   DropdownMenu,
   DropdownStateMixin,
   FadeMixin,
+  FormControls,
   Glyphicon,
   Grid,
   Input,
@@ -106,6 +105,7 @@ export default {
   TabPane,
   Thumbnail,
   Tooltip,
+  utils,
   Well,
   styleMaps
 };
