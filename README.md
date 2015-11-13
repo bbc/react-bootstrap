@@ -3,16 +3,28 @@
 [Bootstrap 3][bootstrap] components built with [React][react]
 
 [![Travis Build Status][build-badge]][build]
-[![NPM version][npm-badge]][npm]
-[![Bower version][bower-badge]][bower]
+[![Build status][appveyor-badge]][appveyor]
+
 [![HuBoard][huboard-badge]][huboard]
 [![Gitter][gitter-badge]][gitter]
+[![Thinkful][thinkful-badge]][thinkful]
+
+[![NPM version][npm-badge]][npm]
+[![Bower version][bower-badge]][bower]
 
 [![Dependency Status][deps-badge]][deps]
 [![devDependency Status][dev-deps-badge]][dev-deps]
 [![peerDependency Status][peer-deps-badge]][peer-deps]
 
-__Under active development - APIs will change.__ Check out the [1.0.0 Roadmap](https://github.com/react-bootstrap/react-bootstrap/wiki#100-roadmap) and [Contributing Guidelines][contributing] to see where you can help out. Prior to the 1.0.0 release, breaking changes should result in a Minor version bump.
+__Under active development - APIs will change.__ Check out the [1.0.0 Roadmap](https://github.com/react-bootstrap/react-bootstrap/wiki#100-roadmap) and [Contributing Guidelines][contributing] to see where you can help out. Prior to the 1.0.0 release, deprecations or breaking changes should result in a Minor version bump.
+
+## React-0.14
+
+If you want to try / play with `React-0.14` betas, we cut releases from the `react-14` branch.
+They're on the `react-pre` tag.
+```
+> npm install react-bootstrap@react-pre
+```
 
 ## Docs
 
@@ -43,14 +55,14 @@ Yes please! See the [contributing guidelines][contributing] for details.
 [documentation]: http://react-bootstrap.github.io
 [contributing]: https://github.com/react-bootstrap/react-bootstrap/blob/master/CONTRIBUTING.md
 
-[build-badge]: https://travis-ci.org/react-bootstrap/react-bootstrap.svg
+[build-badge]: https://travis-ci.org/react-bootstrap/react-bootstrap.svg?branch=master
 [build]: https://travis-ci.org/react-bootstrap/react-bootstrap
 
 [npm-badge]: https://badge.fury.io/js/react-bootstrap.svg
 [npm]: http://badge.fury.io/js/react-bootstrap
 
 [bower-badge]: https://badge.fury.io/bo/react-bootstrap.svg
-[bower]: http://badge.fury.io/bo/react-bootstrap 
+[bower]: http://badge.fury.io/bo/react-bootstrap
 
 [gitter-badge]: https://badges.gitter.im/Join%20Chat.svg
 [gitter]: https://gitter.im/react-bootstrap/react-bootstrap?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge
@@ -62,7 +74,7 @@ Yes please! See the [contributing guidelines][contributing] for details.
 [dev-deps]: https://david-dm.org/react-bootstrap/react-bootstrap#info=devDependencies
 
 [peer-deps-badge]: https://david-dm.org/react-bootstrap/react-bootstrap/peer-status.svg
-[peer-deps]: https://david-dm.org/react-bootstrap/react-bootstrap#info=peerDependencies 
+[peer-deps]: https://david-dm.org/react-bootstrap/react-bootstrap#info=peerDependencies
 
 [react-router-bootstrap]: https://github.com/react-bootstrap/react-router-bootstrap
 [react-router]: https://github.com/rackt/react-router
@@ -72,5 +84,8 @@ Yes please! See the [contributing guidelines][contributing] for details.
 [huboard-badge]: https://img.shields.io/badge/Hu-Board-7965cc.svg
 [huboard]: https://huboard.com/react-bootstrap/react-bootstrap
 
+[thinkful-badge]: https://tf-assets-staging.s3.amazonaws.com/badges/thinkful_repo_badge.svg
+[thinkful]: http://start.thinkful.com/react/?utm_source=github&utm_medium=badge&utm_campaign=react-bootstrap
+
 [appveyor-badge]: https://ci.appveyor.com/api/projects/status/ylitpyo6n5yq1s6i/branch/master?svg=true
-[appveyor]: https://ci.appveyor.com/project/mtscout6/react-bootstrap/branch/master
+[appveyor]: https://ci.appveyor.com/project/react-bootstrap/react-bootstrap/branch/master

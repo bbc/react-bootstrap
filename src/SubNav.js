@@ -4,6 +4,7 @@ import classNames from 'classnames';
 import ValidComponentChildren from './utils/ValidComponentChildren';
 import createChainedFunction from './utils/createChainedFunction';
 import BootstrapMixin from './BootstrapMixin';
+import SafeAnchor from './SafeAnchor';
 
 const SubNav = React.createClass({
   mixins: [BootstrapMixin],
@@ -23,7 +24,9 @@ const SubNav = React.createClass({
 
   getDefaultProps() {
     return {
-      bsClass: 'nav'
+      bsClass: 'nav',
+      active: false,
+      disabled: false
     };
   },
 
@@ -59,7 +62,7 @@ const SubNav = React.createClass({
 
       ValidComponentChildren.forEach(
         child.props.children,
-        function (grandchild) {
+        grandchild => {
           if (this.isChildActive(grandchild)) {
             isActive = true;
           }
@@ -99,14 +102,13 @@ const SubNav = React.createClass({
 
     return (
       <li {...this.props} className={classNames(this.props.className, classes)}>
-        <a
+        <SafeAnchor
           href={this.props.href}
           title={this.props.title}
           target={this.props.target}
-          onClick={this.handleClick}
-          ref="anchor">
+          onClick={this.handleClick}>
           {this.props.text}
-        </a>
+        </SafeAnchor>
         <ul className="nav">
           {ValidComponentChildren.map(this.props.children, this.renderNavItem)}
         </ul>

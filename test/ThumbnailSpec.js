@@ -2,38 +2,38 @@ import React from 'react';
 import ReactTestUtils from 'react/lib/ReactTestUtils';
 import Thumbnail from '../src/Thumbnail';
 
-describe('Thumbnail', function () {
-  it('Should have a thumbnail class and be an anchor', function () {
+describe('Thumbnail', () => {
+  it('Should have a thumbnail class and be an anchor', () => {
     let instance = ReactTestUtils.renderIntoDocument(
       <Thumbnail href="#" src="#" alt="test" />
     );
-    assert.ok(instance.getDOMNode().className.match(/\bthumbnail\b/));
+    assert.ok(React.findDOMNode(instance).className.match(/\bthumbnail\b/));
     assert.ok(ReactTestUtils.findRenderedDOMComponentWithTag(instance, 'a'));
   });
 
-  it('Should have an image', function () {
+  it('Should have an image', () => {
     let instance = ReactTestUtils.renderIntoDocument(
       <Thumbnail href="#" src="#" alt="test" />
     );
     assert.ok(ReactTestUtils.findRenderedDOMComponentWithTag(instance, 'img'));
   });
 
-  it('Should have a thumbnail class and be a div', function () {
+  it('Should have a thumbnail class and be a div', () => {
     let instance = ReactTestUtils.renderIntoDocument(
       <Thumbnail src="#" alt="test" />
     );
-    assert.ok(instance.getDOMNode().className.match(/\bthumbnail\b/));
-    assert.equal(instance.getDOMNode().nodeName, 'DIV');
+    assert.ok(React.findDOMNode(instance).className.match(/\bthumbnail\b/));
+    assert.equal(React.findDOMNode(instance).nodeName, 'DIV');
   });
 
-    it('Should have an image', function () {
+  it('Should have an image', () => {
     let instance = ReactTestUtils.renderIntoDocument(
       <Thumbnail src="#" alt="test" />
     );
     assert.ok(ReactTestUtils.findRenderedDOMComponentWithTag(instance, 'img'));
   });
 
-    it('Should have an inner div with class caption', function () {
+  it('Should have an inner div with class caption', () => {
     let instance = ReactTestUtils.renderIntoDocument(
       <Thumbnail src="#" alt="test">
         Test
@@ -42,6 +42,6 @@ describe('Thumbnail', function () {
         </div>
       </Thumbnail>
     );
-    assert.ok(instance.getDOMNode().lastChild.className.match(/\bcaption\b/));
+    assert.ok(React.findDOMNode(instance).lastChild.className.match(/\bcaption\b/));
   });
 });

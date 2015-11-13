@@ -22,13 +22,14 @@ class FormGroup extends React.Component {
 }
 
 FormGroup.defaultProps = {
+  hasFeedback: false,
   standalone: false
 };
 
 FormGroup.propTypes = {
   standalone: React.PropTypes.bool,
   hasFeedback: React.PropTypes.bool,
-  bsSize (props) {
+  bsSize(props) {
     if (props.standalone && props.bsSize !== undefined) {
       return new Error('bsSize will not be used when `standalone` is set.');
     }

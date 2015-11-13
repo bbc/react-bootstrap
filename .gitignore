@@ -1,6 +1,6 @@
 *~
 .DS_Store
-npm-debug.log
+npm-debug.log*
 node_modules
 amd/
 !tools/amd/
@@ -8,7 +8,7 @@ lib/
 !tools/lib/
 !tools/dist/
 docs-built/
-ie8/bundle.js
 tmp-bower-repo/
 tmp-docs-repo/
 .babel-cache/
+.coverage/

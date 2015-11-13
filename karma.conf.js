@@ -1,19 +1,30 @@
-/* eslint no-var: 0 */
+/* eslint no-var: 0, babel/object-shorthand: 0, vars-on-top: 0, func-names: 0 */
 require('babel/register');
 
 var webpackConfig = require('./webpack/test.config.js');
 var isCI = process.env.CONTINUOUS_INTEGRATION === 'true';
+var runCoverage = process.env.COVERAGE === 'true' || isCI;
 var devBrowser = process.env.PHANTOM ? 'PhantomJS' : 'Chrome';
 
-module.exports = function (config) {
+var preprocessors = ['webpack', 'sourcemap'];
+var reporters = ['mocha'];
+
+if (runCoverage) {
+  webpackConfig = require('./webpack/test-coverage.config');
+  reporters.push('coverage');
+
+  if (isCI) {
+    reporters.push('coveralls');
+  }
+}
+
+module.exports = function(config) {
   config.set({
 
     basePath: '',
 
     frameworks: [
       'mocha',
-      'chai',
-      'sinon',
       'sinon-chai'
     ],
 
@@ -22,19 +33,27 @@ module.exports = function (config) {
     ],
 
     preprocessors: {
-      'test/index.js': ['webpack', 'sourcemap']
+      'test/index.js': preprocessors
     },
 
     webpack: webpackConfig,
 
     webpackMiddleware: {
-      noInfo: isCI
+      noInfo: true
     },
 
-    reporters: ['mocha'],
+    reporters: reporters,
 
     mochaReporter: {
       output: 'autowatch'
+    },
+
+    coverageReporter: {
+      dir: '.coverage',
+      reporters: [
+        { type: 'html' },
+        { type: 'lcovonly' }
+      ]
     },
 
     port: 9876,

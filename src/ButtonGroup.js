@@ -1,27 +1,34 @@
 import React from 'react';
 import classNames from 'classnames';
 import BootstrapMixin from './BootstrapMixin';
-import CustomPropTypes from './utils/CustomPropTypes';
+import all from 'react-prop-types/lib/all';
 
 const ButtonGroup = React.createClass({
   mixins: [BootstrapMixin],
 
   propTypes: {
-    vertical:  React.PropTypes.bool,
+    vertical: React.PropTypes.bool,
     justified: React.PropTypes.bool,
-    block: CustomPropTypes.all([
+    /**
+     * Display block buttons, only useful when used with the "vertical" prop.
+     * @type {bool}
+     */
+    block: all(
       React.PropTypes.bool,
-      function(props, propName, componentName) {
+      props => {
         if (props.block && !props.vertical) {
           return new Error('The block property requires the vertical property to be set to have any effect');
         }
       }
-    ])
+    )
   },
 
   getDefaultProps() {
     return {
-      bsClass: 'button-group'
+      block: false,
+      bsClass: 'button-group',
+      justified: false,
+      vertical: false
     };
   },
 

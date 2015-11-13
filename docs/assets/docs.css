@@ -29,6 +29,7 @@
  * Responsive tests
  * Glyphicons
  * Customizer
+ * MenuItem
  * Miscellaneous
  */
 
@@ -271,9 +272,6 @@ body {
 }
 
 @media (min-width: 768px) {
-  .bs-docs-masthead {
-    padding: 80px 0;
-  }
   .bs-docs-masthead h1 {
     font-size: 60px;
   }
@@ -1125,6 +1123,14 @@ h1[id] {
   height: 200px;
   margin-top: 10px;
   overflow: auto;
+}
+
+/* MenuItem */
+.bs-example .dropdown-menu.open {
+  position: static;
+  display: block;
+  margin-bottom: 5px;
+  clear: left;
 }
 
 

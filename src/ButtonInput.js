@@ -6,12 +6,12 @@ import childrenValueValidation from './utils/childrenValueInputValidation';
 
 class ButtonInput extends InputBase {
   renderFormGroup(children) {
-    let {bsStyle, value, ...other} = this.props; // eslint-disable-line object-shorthand, no-unused-vars
+    let {bsStyle, value, ...other} = this.props;
     return <FormGroup {...other}>{children}</FormGroup>;
   }
 
   renderInput() {
-    let {children, value, ...other} = this.props; // eslint-disable-line object-shorthand
+    let {children, value, ...other} = this.props;
     let val = children ? children : value;
     return <Button {...other} componentClass="input" ref="input" key="input" value={val} />;
   }
@@ -25,8 +25,8 @@ ButtonInput.defaultProps = {
 
 ButtonInput.propTypes = {
   type: React.PropTypes.oneOf(ButtonInput.types),
-  bsStyle(props) {
-    //defer to Button propTypes of bsStyle
+  bsStyle() {
+    // defer to Button propTypes of bsStyle
     return null;
   },
   children: childrenValueValidation,

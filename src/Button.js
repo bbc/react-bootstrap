@@ -1,6 +1,8 @@
 import React from 'react';
 import classNames from 'classnames';
 import BootstrapMixin from './BootstrapMixin';
+import elementType from 'react-prop-types/lib/elementType';
+import ButtonInput from './ButtonInput';
 
 const Button = React.createClass({
   mixins: [BootstrapMixin],
@@ -11,16 +13,29 @@ const Button = React.createClass({
     block: React.PropTypes.bool,
     navItem: React.PropTypes.bool,
     navDropdown: React.PropTypes.bool,
-    componentClass: React.PropTypes.node,
+    /**
+     * You can use a custom element for this component
+     */
+    componentClass: elementType,
     href: React.PropTypes.string,
-    target: React.PropTypes.string
+    target: React.PropTypes.string,
+    /**
+     * Defines HTML button type Attribute
+     * @type {("button"|"reset"|"submit")}
+     * @defaultValue 'button'
+     */
+    type: React.PropTypes.oneOf(ButtonInput.types)
   },
 
   getDefaultProps() {
     return {
+      active: false,
+      block: false,
       bsClass: 'button',
       bsStyle: 'default',
-      type: 'button'
+      disabled: false,
+      navItem: false,
+      navDropdown: false
     };
   },
 
@@ -31,7 +46,7 @@ const Button = React.createClass({
     classes = {
       active: this.props.active,
       'btn-block': this.props.block,
-      ...classes // eslint-disable-line object-shorthand
+      ...classes
     };
 
     if (this.props.navItem) {
@@ -45,7 +60,6 @@ const Button = React.createClass({
   },
 
   renderAnchor(classes) {
-
     let Component = this.props.componentClass || 'a';
     let href = this.props.href || '#';
     classes.disabled = this.props.disabled;
@@ -67,6 +81,7 @@ const Button = React.createClass({
     return (
       <Component
         {...this.props}
+        type={this.props.type || 'button'}
         className={classNames(this.props.className, classes)}>
         {this.props.children}
       </Component>

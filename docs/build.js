@@ -1,3 +1,5 @@
+/* eslint no-console: 0 */
+
 import React from 'react';
 import path from 'path';
 import Router from 'react-router';
@@ -6,6 +8,7 @@ import Root from './src/Root';
 import fsp from 'fs-promise';
 import { copy } from '../tools/fs-utils';
 import { exec } from '../tools/exec';
+import metadata from './generate-metadata';
 
 const repoRoot = path.resolve(__dirname, '../');
 const docsBuilt = path.join(repoRoot, 'docs-built');
@@ -21,10 +24,12 @@ const readmeDest = path.join(docsBuilt, 'README.md');
  * @return {Promise} promise
  * @internal
  */
-function generateHTML(fileName) {
-  return new Promise((resolve, reject) => {
-    Router.run(routes, '/' + fileName, Handler => {
-      let html = React.renderToString(React.createElement(Handler));
+function generateHTML(fileName, propData) {
+  return new Promise( resolve => {
+    const urlSlug = fileName === 'index.html' ? '/' : `/${fileName}`;
+
+    Router.run(routes, urlSlug, Handler => {
+      let html = React.renderToString(React.createElement(Handler, { propData }));
       html = '<!doctype html>' + html;
       let write = fsp.writeFile(path.join(docsBuilt, fileName), html);
       resolve(write);
@@ -32,16 +37,19 @@ function generateHTML(fileName) {
   });
 }
 
-export default function BuildDocs({ dev }) {
+export default function BuildDocs({dev}) {
   console.log('Building: '.cyan + 'docs'.green + (dev ? ' [DEV]'.grey : ''));
+
+  const devOption = dev ? '' : '-p';
 
   return exec(`rimraf ${docsBuilt}`)
     .then(() => fsp.mkdir(docsBuilt))
-    .then(() => {
-      let pagesGenerators = Root.getPages().map(generateHTML);
+    .then(metadata)
+    .then(propData => {
+      let pagesGenerators = Root.getPages().map( page => generateHTML(page, propData));
 
       return Promise.all(pagesGenerators.concat([
-        exec(`webpack --config webpack.docs.js ${dev ? '' : '-p '}--bail`),
+        exec(`webpack --config webpack.docs.js --bail ${devOption}`),
         copy(license, docsBuilt),
         copy(readmeSrc, readmeDest)
       ]));

@@ -3,26 +3,26 @@ import ReactTestUtils from 'react/lib/ReactTestUtils';
 import Pager from '../src/Pager';
 import PageItem from '../src/PageItem';
 
-describe('Pager', function () {
-  it('Should output a unordered list as root element with class "pager"', function () {
+describe('Pager', () => {
+  it('Should output a unordered list as root element with class "pager"', () => {
     let instance = ReactTestUtils.renderIntoDocument(
       <Pager/>
     );
-    assert.equal(instance.getDOMNode().nodeName, 'UL');
+    assert.equal(React.findDOMNode(instance).nodeName, 'UL');
     assert.ok(ReactTestUtils.findRenderedDOMComponentWithClass(instance, 'pager'));
   });
 
-  it('Should allow "PageItem" as child element', function () {
+  it('Should allow "PageItem" as child element', () => {
     let instance = ReactTestUtils.renderIntoDocument(
       <Pager>
         <PageItem href="#">Top</PageItem>
       </Pager>
     );
-    assert.equal(instance.getDOMNode().children.length, 1);
-    assert.equal(instance.getDOMNode().children[0].nodeName, 'LI');
+    assert.equal(React.findDOMNode(instance).children.length, 1);
+    assert.equal(React.findDOMNode(instance).children[0].nodeName, 'LI');
   });
 
-  it('Should allow multiple "PageItem" as child elements', function () {
+  it('Should allow multiple "PageItem" as child elements', () => {
     let instance = ReactTestUtils.renderIntoDocument(
       <Pager>
         <PageItem previous href="#">Previous</PageItem>
@@ -35,7 +35,7 @@ describe('Pager', function () {
     assert.ok(ReactTestUtils.findRenderedDOMComponentWithClass(instance, 'next'));
   });
 
-  it('Should call "onSelect" when item is clicked', function (done) {
+  it('Should call "onSelect" when item is clicked', (done) => {
     function handleSelect(key, href) {
       assert.equal(key, 2);
       assert.equal(href, '#next');

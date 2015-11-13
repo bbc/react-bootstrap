@@ -1,3 +1,294 @@
+v0.26.4 - Wed, 07 Oct 2015 21:41:05 GMT
+---------------------------------------
+
+
+
+
+
+v0.26.3 - Wed, 07 Oct 2015 20:41:43 GMT
+---------------------------------------
+
+
+
+
+
+v0.26.2 - Wed, 07 Oct 2015 16:43:16 GMT
+---------------------------------------
+
+- [ca52c30](../../commit/ca52c30) [fixed] Actually export the Image component
+- [73daba7](../../commit/73daba7) [fixed] Show toggle button when using NavBrand
+
+
+
+v0.26.1 - Mon, 05 Oct 2015 02:04:27 GMT
+---------------------------------------
+
+
+
+
+
+v0.26.0 - Sun, 04 Oct 2015 21:21:22 GMT
+---------------------------------------
+
+- [b7853bb](../../commit/b7853bb) [fixed] Dropdown focus behavior on click
+- [dbb0385](../../commit/dbb0385) [added] #1320 allow NavItem class to be set
+- [3d13dda](../../commit/3d13dda) [fixed] #1287 ListGroupItem with onClick and header properly displays header
+- [3f5c6e3](../../commit/3f5c6e3) [added] #1181 ListGroup supports componentClass prop
+- [b5a9f3a](../../commit/b5a9f3a)     [added] NavBrand Component
+- [ac37698](../../commit/ac37698) [added] 'Responsive embed' component
+- [1c2d054](../../commit/1c2d054) [fixed] Set the disabled css class so that the text is greyed out.
+- [0348274](../../commit/0348274) [fixed] Breadcrumb and BreadcrumbItem components
+- [3c710f9](../../commit/3c710f9) [added] Breadcrumb component
+- [99d333f](../../commit/99d333f) [changed] use `lodash-compat` for IE8 compatibility and `lodash` for dev
+- [ce564cb](../../commit/ce564cb) [fixed] any props not known by DropdownMenu are passed through to the underlying ul
+- [674d67e](../../commit/674d67e) [added] images component
+- [deee09d](../../commit/deee09d) [fixed] stop rendering extra attributes on Progress bar dom nodes
+- [02f1fec](../../commit/02f1fec) [fixed] allow null activeKey (empty) selection
+- [656f40d](../../commit/656f40d) [changed] 'id' prop-type made uniform throughout the project
+- [b9a4477](../../commit/b9a4477) [changed] use 'react-prop-types' instead of 'utils/CustomPropTypes'
+
+
+
+v0.25.2 - Sat, 12 Sep 2015 15:59:13 GMT
+---------------------------------------
+
+- [f2c3b68](../../commit/f2c3b68) [changed] tab keyboard navigation to be more inline with ARIA spec
+- [0c27403](../../commit/0c27403) [fixed] Don't render Grid or Row with Tabs
+- [b847dec](../../commit/b847dec) [added] active prop on MenuItem (again)
+- [3a369cc](../../commit/3a369cc) [fixed] Error on opening dropdown without focusable items
+- [bad277e](../../commit/bad277e) [changed] Use PropTypes.node for validation and fix/add tests
+- [533530a](../../commit/533530a) [added] Adds a callout to the sr-only button in `Closable Alerts`
+- [1f29000](../../commit/1f29000) [fixed] screen-reader accessible dismiss button on alerts
+- [c8a59c6](../../commit/c8a59c6) [fixed] OverlayTrigger hover triggers on mousenter/leave
+- [9c69271](../../commit/9c69271) [fixed] OverlayTrigger event handlers are properly maintained
+- [da1d0bc](../../commit/da1d0bc) [fixed] focus returns to the toggle by default onClose
+
+
+
+v0.25.1 - Fri, 28 Aug 2015 18:30:59 GMT
+---------------------------------------
+
+- [478300a](../../commit/478300a) [fixed] Handle falsey DropdownMenu  children correctly
+- [c450e96](../../commit/c450e96) [fixed] stop rendering extra attributes on Progress bar dom nodes
+- [3ceb7af](../../commit/3ceb7af) [fixed] allow null activeKey (empty) selection
+- [a7f93ae](../../commit/a7f93ae) [fixed] title is not passed to tab pane DOM node
+- [1bee466](../../commit/1bee466) [changed] 'id' prop-type made uniform throughout the project
+- [e438250](../../commit/e438250) [fixed] 'isRequireForA11y' undefined/null checking
+- [664b465](../../commit/664b465) [fixed] id passthrough for MenuItem
+
+
+
+v0.25.0 - Tue, 25 Aug 2015 18:56:33 GMT
+---------------------------------------
+
+- [8776128](../../commit/8776128) [fixed] Affix in IE10 - scrollHeight #1073
+- [adad32e](../../commit/adad32e) [added] PropType validation for headerRole and panelRole
+- [346501e](../../commit/346501e) [changed] DropdownButton, SplitButton, DropdownMenu, MenuItem completely rewritten
+- [653d2ff](../../commit/653d2ff) [changed] deprecate domUtils as a public API
+- [769781d](../../commit/769781d) [added] accessibility props for PanelGroup and Panels.
+- [5f0ac64](../../commit/5f0ac64) [added] Implements a generalized left-aligned version of tabs
+- [628d586](../../commit/628d586) [changed] deprecated Position, Transition, Portal
+- [03a6a61](../../commit/03a6a61) [changed] deprecated the Transition duration prop
+- [459ab0c](../../commit/459ab0c) [added] #460 ListGroupItem outputs <button> when an onClick handler is set.
+- [e482ede](../../commit/e482ede) [fixed] wrong tabs switching animation for 'Tabs' component
+- [b62e1f5](../../commit/b62e1f5) [fixed] wrong tabs switching animation for 'TabbedArea' component
+- [d0ff625](../../commit/d0ff625) [added] aria role "tablist" to the Nav on Tabs
+- [e7cf455](../../commit/e7cf455) [changed] New Tabs API
+- [f6d32c4](../../commit/f6d32c4) [changed] deprecate 'utils/CustomPropTypes' exporting
+- [caff9a0](../../commit/caff9a0) [removed] Factory support
+
+
+
+v0.24.5 - Fri, 14 Aug 2015 18:02:13 GMT
+---------------------------------------
+
+- [dc2a07a](../../commit/dc2a07a) [fixed] Collapse exported as Fade
+- [f53bcf5](../../commit/f53bcf5) [fixed] 'bsSize' and 'bsStyle' properties has been removed from 'Glyphicon'
+
+
+
+v0.24.4 - Mon, 10 Aug 2015 19:33:35 GMT
+---------------------------------------
+
+- [b688014](../../commit/b688014) [added] custom feedback icons for Input
+- [83cdaa3](../../commit/83cdaa3) [added] formControlFeedback prop to Glyphicon
+- [2ecac68](../../commit/2ecac68) [fixed] Modal uses provided className again
+- [47bd7f6](../../commit/47bd7f6) [fixed] disabled pagination buttons should not fire 'onSelect'
+- [c60dc03](../../commit/c60dc03) [fixed] only add aria-expanded to Collapse when an ARIA role is present
+
+
+
+v0.24.3 - Fri, 31 Jul 2015 18:09:54 GMT
+---------------------------------------
+
+- [02f8966](../../commit/02f8966) [changed] Update dependencies
+- [bae8ba9](../../commit/bae8ba9) [fixed] Carousel checks if it is mounted before setting state
+- [fd8d4d2](../../commit/fd8d4d2) [fixed] regression when clicking "static" modal backdrops
+- [0f46a97](../../commit/0f46a97) [added] Allow custom Modal dialog components
+- [a4ce7e1](../../commit/a4ce7e1) [fixed] added finalisation for the Modal when it was unbound from the tree
+- [d89d5f3](../../commit/d89d5f3) [fixed] Modal error when backdrop is `false`
+- [f410904](../../commit/f410904) [added] 'xs, sm, md, lg' values for 'bsSize'
+- [2558f32](../../commit/2558f32) [fixed] TabbedArea panes rendering with animation
+- [90aece6](../../commit/90aece6) [changed] Simplify 'styleMaps.STYLES' to be of Array type
+- [860d168](../../commit/860d168) [fixed] allow totally custom styles via 'bsStyle'
+- [74da76a](../../commit/74da76a) [fixed] Prevent click on PageItem if disabled
+
+
+
+v0.24.2 - Sat, 25 Jul 2015 00:47:07 GMT
+---------------------------------------
+
+- [4271eb3](../../commit/4271eb3) [fixed] add lodash as direct dependency
+
+
+
+v0.24.1 - Fri, 24 Jul 2015 23:12:09 GMT
+---------------------------------------
+
+- [e5155c6](../../commit/e5155c6) [fixed] ensure last focused item can be focused
+- [6a541ff](../../commit/6a541ff) [added] buttonComponentClass prop for Pagination
+- [29fe417](../../commit/29fe417) [fixed] overlay classNames are maintained by overlayTrigget
+- [d272389](../../commit/d272389) [added] Overlay and OverlayTrigger accept Transition callbacks
+- [596f40c](../../commit/596f40c) [fixed] Modal uses bsClass prop to set its classes
+- [86d3feb](../../commit/86d3feb) [fixed] added missed 'aria-label' prop type validation for 'ModalHeader'
+- [58eaab0](../../commit/58eaab0) [changed] pass transition callbacks to Modal Transition
+- [abccff9](../../commit/abccff9) [changed] expose static Modal Dialog component
+- [b5c1893](../../commit/b5c1893) [changed] unfix 'babel' back.
+
+
+
+v0.24.0 - Tue, 21 Jul 2015 22:13:05 GMT
+---------------------------------------
+
+- [924f8fb](../../commit/924f8fb) [fixed] Tooltip accepts a style prop
+- [dd064ad](../../commit/dd064ad) [fixed] remove extraneous styling
+- [c837d8d](../../commit/c837d8d) [fixed] Only calculate overlay position on display
+- [fbf9ed6](../../commit/fbf9ed6) [changed] Add deprecation warning that factories will be removed
+- [a4385d3](../../commit/a4385d3) [fixed] Portal doesn't mount extra node
+- [6744b94](../../commit/6744b94) [fixed] 'modalClassName' property for 'ModalTitle'
+- [3e6523a](../../commit/3e6523a) [added] ListGroup supports iterator as child
+- [ec368f0](../../commit/ec368f0) [added] Fade Component, replaces FadeMixin
+- [0503507](../../commit/0503507) [added] Collapse Component, replaces CollapsibleMixin
+- [4fb7e0d](../../commit/4fb7e0d) [changed] Remove Overlay and Modal deprecations
+- [0683df7](../../commit/0683df7) [fixed] 'stacked' progress with 'active' and 'striped' children
+- [a3c5400](../../commit/a3c5400) [fixed] Add missed 'type' property React.PropTypes.<type> checking
+- [a4c065e](../../commit/a4c065e) [added] links to every component / example on Components page
+- [eb0c323](../../commit/eb0c323) [fixed] Position.js typo `componentDidUpate`
+- [9feddf9](../../commit/9feddf9) [fixed] 'componentWillReceiveProps' method name of Position component
+- [c64679f](../../commit/c64679f) [fixed] Active Next and Last button in Pagination when ellipsis=true and items=0
+- [9dae734](../../commit/9dae734) [fixed] Negative page number in Pagination when ellipsis=true and items=1
+- [ffbcf39](../../commit/ffbcf39) [fixed] html id and class attributes handling for Nav
+- [89ea6ed](../../commit/89ea6ed) [fixed] Add missed propType validation for Button 'type' property
+- [b1b6a4c](../../commit/b1b6a4c) [changed] Add two-release deprecation policy
+- [e89b9bc](../../commit/e89b9bc) [removed] Don't need to disable Babel cache
+- [d12d59e](../../commit/d12d59e) [changed] Enabled "loose" Babel transpilation
+- [01c547f](../../commit/01c547f) [fixed] Do not use Babel cache for release build
+- [b67081b](../../commit/b67081b) [fixed] rootClose behavior on replaced elements
+- [fbbb344](../../commit/fbbb344) [fixed] bower template.
+- [fafe46f](../../commit/fafe46f) [changed] Use named exports in index files
+- [6e985b0](../../commit/6e985b0) [removed] Individual files in bower release
+- [598b9d8](../../commit/598b9d8) [fixed] SafeAnchor event ordering
+- [beaa1fa](../../commit/beaa1fa) [changed] `PaginationButton` to use `SafeAnchor`
+- [9c09e2a](../../commit/9c09e2a) [fixed] Keyboard accessibility for anchors serving as buttons
+- [ce5b436](../../commit/ce5b436) [removed] Input type=submit deprecation warning.
+
+
+
+v0.23.7 - Wed, 01 Jul 2015 15:18:30 GMT
+---------------------------------------
+
+- [35ea201](../../commit/35ea201) [fixed] Accidental breaking change in Modal trigger
+
+
+
+v0.23.6 - Wed, 01 Jul 2015 00:48:02 GMT
+---------------------------------------
+
+- [1b1af04](../../commit/1b1af04) [changed] deprecate ModalTrigger
+- [83b4cbc](../../commit/83b4cbc) [changed] Modal doesn't require ModalTrigger
+- [d70f617](../../commit/d70f617) [changed] tooltips and popovers required id's for a11y
+- [389cf3f](../../commit/389cf3f) [changed] Deprecate OverlayTrigger positioning api and "manual" trigger
+- [5eb8666](../../commit/5eb8666) [added] Overlay component
+- [1638f69](../../commit/1638f69) [added] Position component for custom Overlays
+- [f799110](../../commit/f799110) [added] Portal component; replaces OverlayMixin
+- [97ef415](../../commit/97ef415) [fixed] Modal won't steal focus from children
+- [a8b177a](../../commit/a8b177a) [fixed] Stack overflow with nested Modals
+- [3caa866](../../commit/3caa866) [changed] Update babel-loader
+- [6ffa325](../../commit/6ffa325) [fixed] 'componentClass' property type is 'elementType' now
+- [0e5980f](../../commit/0e5980f) [added] 'elementType' custom prop type validator
+- [8f582d2](../../commit/8f582d2) [changed] Update karma-chrome-launcher. Dev dependency
+- [d4089d0](../../commit/d4089d0) [changed] Update eslint-plugin-mocha. Dev dependency
+- [fd547f4](../../commit/fd547f4) [changed] Update karma-mocha. Dev dependency.
+- [c5797e8](../../commit/c5797e8) [added] componentClass prop to Jumbotron
+
+
+
+v0.23.5 - Tue, 23 Jun 2015 01:31:35 GMT
+---------------------------------------
+
+- [23f9d21](../../commit/23f9d21) [changed] Add missed prop types validations.
+- [320b7ab](../../commit/320b7ab) [changed] Update fs-extra. Dev dependency.
+- [2ffcf5d](../../commit/2ffcf5d) [fixed] Popovers flicker when moving mouse amongst children of the trigger
+- [ccc50e0](../../commit/ccc50e0) [fixed] Accessibility: Panel header uses aria-controls
+- [1e552cc](../../commit/1e552cc) [added] Accessibility: use appropriate ARIA's when an id is given to the tabbed area
+- [8752754](../../commit/8752754) [added] Add linkId prop to NavItem
+- [722969d](../../commit/722969d) [added] Accessibility, add tab roles when type "tabs"
+- [4adaa70](../../commit/4adaa70) [added] Accessibility: role 'alert' and aria-label to Alert component
+- [2594dce](../../commit/2594dce) [fixed] Modal Null Exception when react-bootstrap is loaded before the Body tag
+- [e77bf88](../../commit/e77bf88) [changed] Update eslint. Dev dependency.
+
+
+
+v0.23.4 - Tue, 16 Jun 2015 00:37:04 GMT
+---------------------------------------
+
+- [0ce46b9](../../commit/0ce46b9) [changed] only autofocus modals when enforceFocus is true (the default)
+- [c5855d2](../../commit/c5855d2) [changed] createChainedFunction to chain many functions, and to throw if non-functions are provided.
+- [d18dadb](../../commit/d18dadb) [fixed] container content no longer shifts when overflowing
+- [66f0f92](../../commit/66f0f92) [added] enforceFocus prop to Modal
+- [3869ca2](../../commit/3869ca2) [fixed] Modal doesn't "jump" when container is overflowing
+
+
+
+v0.23.3 - Fri, 12 Jun 2015 21:46:30 GMT
+---------------------------------------
+
+- [9ca26e9](../../commit/9ca26e9) [added] contains "polyfill" to domUtils
+- [3a254a1](../../commit/3a254a1) [added] Deprecation warning for individual file use in the Bower release
+- [73c7705](../../commit/73c7705) [changed] Update chai. Dev dependency.
+- [3ca90c7](../../commit/3ca90c7) [changed] Update karma-sinon-chai. Dev dependency.
+- [cc4e820](../../commit/cc4e820) [changed] Update fs-extra. Dev dependency.
+
+
+
+v0.23.2 - Mon, 08 Jun 2015 18:56:48 GMT
+---------------------------------------
+
+- [7211dcb](../../commit/7211dcb) [added] Add prevIcon and nextIcon props as node proptypes to Carousel
+- [5734ec3](../../commit/5734ec3) [added] Pagination component
+- [2f8c454](../../commit/2f8c454) [changed] Assert ProgressBar children can be ProgressBar only.
+- [2c46820](../../commit/2c46820) [added] `createSelectedEvent` for consistent onSelect handling
+- [c2ff9ad](../../commit/c2ff9ad) [added] property disabled on MenuItem
+
+
+
+v0.23.1 - Tue, 02 Jun 2015 16:57:57 GMT
+---------------------------------------
+
+- [4d265f0](../../commit/4d265f0) [fixed] Use babel api to avoid command line conflicts between Linux and Windows
+- [0cfbf3b](../../commit/0cfbf3b) [fixed] IE8 will now close an open DropdownButton menu when clicking button
+- [d105749](../../commit/d105749) [added] utils object to exported src/index
+- [29bc64f](../../commit/29bc64f) [changed] Remove Dev dependency babel-plugin-object-assign.
+- [1fec852](../../commit/1fec852) [changed] Update karma-phantomjs-launcher. Dev dependency.
+- [f494604](../../commit/f494604) [changed] Update eslint. Dev dependency.
+- [a4331ed](../../commit/a4331ed) [changed] Make the brand name consistent.
+- [b213be0](../../commit/b213be0) [changed] Remove ES6 sources from npm distribution.
+- [73c5ec9](../../commit/73c5ec9) [changed] Remove extraneous utils/Object.assign.js
+- [935171f](../../commit/935171f) [added] Now accepting a `block` property on the ButtonGroup component. Closes #240.
+- [dfec023](../../commit/dfec023) [added] CustomPropType.all to allow multiple validations
+
+
+
 v0.23.0 - Tue, 26 May 2015 19:32:52 GMT
 ---------------------------------------
 

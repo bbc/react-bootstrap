@@ -2,6 +2,7 @@ import React, { cloneElement } from 'react';
 import classNames from 'classnames';
 import BootstrapMixin from './BootstrapMixin';
 import ValidComponentChildren from './utils/ValidComponentChildren';
+import Glyphicon from './Glyphicon';
 
 const Carousel = React.createClass({
   mixins: [BootstrapMixin],
@@ -17,7 +18,9 @@ const Carousel = React.createClass({
     onSlideEnd: React.PropTypes.func,
     activeIndex: React.PropTypes.number,
     defaultActiveIndex: React.PropTypes.number,
-    direction: React.PropTypes.oneOf(['prev', 'next'])
+    direction: React.PropTypes.oneOf(['prev', 'next']),
+    prevIcon: React.PropTypes.node,
+    nextIcon: React.PropTypes.node
   },
 
   getDefaultProps() {
@@ -27,7 +30,9 @@ const Carousel = React.createClass({
       pauseOnHover: true,
       wrap: true,
       indicators: true,
-      controls: true
+      controls: true,
+      prevIcon: <Glyphicon glyph="chevron-left" />,
+      nextIcon: <Glyphicon glyph="chevron-right" />
     };
   },
 
@@ -158,7 +163,7 @@ const Carousel = React.createClass({
   renderPrev() {
     return (
       <a className="left carousel-control" href="#prev" key={0} onClick={this.prev}>
-        <span className="glyphicon glyphicon-chevron-left" />
+        {this.props.prevIcon}
       </a>
     );
   },
@@ -166,7 +171,7 @@ const Carousel = React.createClass({
   renderNext() {
     return (
       <a className="right carousel-control" href="#next" key={1} onClick={this.next}>
-        <span className="glyphicon glyphicon-chevron-right"/>
+        {this.props.nextIcon}
       </a>
     );
   },
@@ -203,7 +208,7 @@ const Carousel = React.createClass({
   renderIndicators() {
     let indicators = [];
     ValidComponentChildren
-      .forEach(this.props.children, function(child, index) {
+      .forEach(this.props.children, (child, index) => {
         indicators.push(
           this.renderIndicator(child, index),
 
@@ -228,7 +233,7 @@ const Carousel = React.createClass({
     this.setState({
       previousActiveIndex: null,
       direction: null
-    }, function() {
+    }, () => {
       this.waitForNext();
 
       if (this.props.onSlideEnd) {
@@ -244,43 +249,45 @@ const Carousel = React.createClass({
             this.state.previousActiveIndex === index && this.props.slide;
 
     return cloneElement(
-        child,
-        {
-          active: isActive,
-          ref: child.ref,
-          key: child.key ? child.key : index,
-          index,
-          animateOut: isPreviousActive,
-          animateIn: isActive && this.state.previousActiveIndex != null && this.props.slide,
-          direction: this.state.direction,
-          onAnimateOutEnd: isPreviousActive ? this.handleItemAnimateOutEnd : null
-        }
-      );
+      child,
+      {
+        active: isActive,
+        ref: child.ref,
+        key: child.key ? child.key : index,
+        index,
+        animateOut: isPreviousActive,
+        animateIn: isActive && this.state.previousActiveIndex != null && this.props.slide,
+        direction: this.state.direction,
+        onAnimateOutEnd: isPreviousActive ? this.handleItemAnimateOutEnd : null
+      }
+    );
   },
 
   handleSelect(index, direction) {
     clearTimeout(this.timeout);
 
-    let previousActiveIndex = this.getActiveIndex();
-    direction = direction || this.getDirection(previousActiveIndex, index);
+    if (this.isMounted()) {
+      let previousActiveIndex = this.getActiveIndex();
+      direction = direction || this.getDirection(previousActiveIndex, index);
 
-    if (this.props.onSelect) {
-      this.props.onSelect(index, direction);
-    }
-
-    if (this.props.activeIndex == null && index !== previousActiveIndex) {
-      if (this.state.previousActiveIndex != null) {
-        // If currently animating don't activate the new index.
-        // TODO: look into queuing this canceled call and
-        // animating after the current animation has ended.
-        return;
+      if (this.props.onSelect) {
+        this.props.onSelect(index, direction);
       }
 
-      this.setState({
-        activeIndex: index,
-        previousActiveIndex,
-        direction
-      });
+      if (this.props.activeIndex == null && index !== previousActiveIndex) {
+        if (this.state.previousActiveIndex != null) {
+          // If currently animating don't activate the new index.
+          // TODO: look into queuing this canceled call and
+          // animating after the current animation has ended.
+          return;
+        }
+
+        this.setState({
+          activeIndex: index,
+          previousActiveIndex,
+          direction
+        });
+      }
     }
   }
 });

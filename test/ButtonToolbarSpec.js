@@ -4,8 +4,8 @@ import ButtonToolbar from '../src/ButtonToolbar';
 import ButtonGroup from '../src/ButtonGroup';
 import Button from '../src/Button';
 
-describe('ButtonToolbar', function () {
-  it('Should output a button toolbar', function () {
+describe('ButtonToolbar', () => {
+  it('Should output a button toolbar', () => {
     let instance = ReactTestUtils.renderIntoDocument(
       <ButtonToolbar>
         <ButtonGroup>
@@ -15,8 +15,9 @@ describe('ButtonToolbar', function () {
         </ButtonGroup>
       </ButtonToolbar>
     );
-    assert.equal(instance.getDOMNode().nodeName, 'DIV');
-    assert.ok(instance.getDOMNode().className.match(/\bbtn-toolbar\b/));
-    assert.equal(instance.getDOMNode().getAttribute('role'), 'toolbar');
+    let node = React.findDOMNode(instance);
+    assert.equal(node.nodeName, 'DIV');
+    assert.ok(node.className.match(/\bbtn-toolbar\b/));
+    assert.equal(node.getAttribute('role'), 'toolbar');
   });
 });

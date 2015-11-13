@@ -1,12 +1,11 @@
+/* eslint-disable react/prop-types */
 import React, { cloneElement } from 'react';
-
-import OverlayMixin from './OverlayMixin';
-import RootCloseWrapper from './RootCloseWrapper';
-
+import contains from 'dom-helpers/query/contains';
 import createChainedFunction from './utils/createChainedFunction';
 import createContextWrapper from './utils/createContextWrapper';
-import domUtils from './utils/domUtils';
-
+import Overlay from './Overlay';
+import warning from 'react/lib/warning';
+import pick from 'lodash-compat/object/pick';
 /**
  * Check if value one is inside or equal to the of value
  *
@@ -22,47 +21,94 @@ function isOneOf(one, of) {
 }
 
 const OverlayTrigger = React.createClass({
-  mixins: [OverlayMixin],
-
   propTypes: {
+
+    ...Overlay.propTypes,
+
+     /**
+     * Specify which action or actions trigger Overlay visibility
+     */
     trigger: React.PropTypes.oneOfType([
-      React.PropTypes.oneOf(['manual', 'click', 'hover', 'focus']),
+      React.PropTypes.oneOf(['click', 'hover', 'focus']),
       React.PropTypes.arrayOf(React.PropTypes.oneOf(['click', 'hover', 'focus']))
     ]),
-    placement: React.PropTypes.oneOf(['top', 'right', 'bottom', 'left']),
+
+    /**
+     * A millisecond delay amount to show and hide the Overlay once triggered
+     */
     delay: React.PropTypes.number,
+    /**
+     * A millisecond delay amount before showing the Overlay once triggered.
+     */
     delayShow: React.PropTypes.number,
+    /**
+     * A millisecond delay amount before hiding the Overlay once triggered.
+     */
     delayHide: React.PropTypes.number,
+
+    /**
+     * The initial visibility state of the Overlay, for more nuanced visibility controll consider
+     * using the Overlay component directly.
+     */
     defaultOverlayShown: React.PropTypes.bool,
+
+    /**
+     * An element or text to overlay next to the target.
+     */
     overlay: React.PropTypes.node.isRequired,
-    containerPadding: React.PropTypes.number,
-    rootClose: React.PropTypes.bool
+
+    /**
+     * @private
+     */
+    onBlur: React.PropTypes.func,
+    /**
+     * @private
+     */
+    onClick: React.PropTypes.func,
+    /**
+     * @private
+     */
+    onFocus: React.PropTypes.func,
+    /**
+     * @private
+     */
+    onMouseEnter: React.PropTypes.func,
+    /**
+     * @private
+     */
+    onMouseLeave: React.PropTypes.func,
+
+    // override specific overlay props
+    /**
+     * @private
+     */
+    target() {},
+     /**
+     * @private
+     */
+    onHide() {},
+    /**
+     * @private
+     */
+    show() {}
   },
 
   getDefaultProps() {
     return {
-      placement: 'right',
-      trigger: ['hover', 'focus'],
-      containerPadding: 0
+      defaultOverlayShown: false,
+      trigger: ['hover', 'focus']
     };
   },
 
   getInitialState() {
     return {
-      isOverlayShown: this.props.defaultOverlayShown == null ?
-        false : this.props.defaultOverlayShown,
-      overlayLeft: null,
-      overlayTop: null,
-      arrowOffsetLeft: null,
-      arrowOffsetTop: null
+      isOverlayShown: this.props.defaultOverlayShown
     };
   },
 
   show() {
     this.setState({
       isOverlayShown: true
-    }, function() {
-      this.updateOverlayPosition();
     });
   },
 
@@ -76,75 +122,97 @@ const OverlayTrigger = React.createClass({
     if (this.state.isOverlayShown) {
       this.hide();
     } else {
-     this.show();
+      this.show();
     }
   },
 
-  renderOverlay() {
-    if (!this.state.isOverlayShown) {
-      return <span />;
-    }
+  componentWillMount() {
+    this.handleMouseOver = this.handleMouseOverOut.bind(null, this.handleDelayedShow);
+    this.handleMouseOut = this.handleMouseOverOut.bind(null, this.handleDelayedHide);
+  },
 
-    const overlay = cloneElement(
-      this.props.overlay,
-      {
-        onRequestHide: this.hide,
-        placement: this.props.placement,
-        positionLeft: this.state.overlayLeft,
-        positionTop: this.state.overlayTop,
-        arrowOffsetLeft: this.state.arrowOffsetLeft,
-        arrowOffsetTop: this.state.arrowOffsetTop
-      }
+  componentDidMount() {
+    this._mountNode = document.createElement('div');
+    React.render(this._overlay, this._mountNode);
+  },
+
+  componentWillUnmount() {
+    React.unmountComponentAtNode(this._mountNode);
+    this._mountNode = null;
+    clearTimeout(this._hoverDelay);
+  },
+
+  componentDidUpdate() {
+    if (this._mountNode) {
+      React.render(this._overlay, this._mountNode);
+    }
+  },
+
+  getOverlayTarget() {
+    return React.findDOMNode(this);
+  },
+
+  getOverlay() {
+    let overlayProps = {
+      ...pick(this.props, Object.keys(Overlay.propTypes)),
+      show: this.state.isOverlayShown,
+      onHide: this.hide,
+      target: this.getOverlayTarget,
+      onExit: this.props.onExit,
+      onExiting: this.props.onExiting,
+      onExited: this.props.onExited,
+      onEnter: this.props.onEnter,
+      onEntering: this.props.onEntering,
+      onEntered: this.props.onEntered
+    };
+
+    let overlay = cloneElement(this.props.overlay, {
+      placement: overlayProps.placement,
+      container: overlayProps.container
+    });
+
+    return (
+      <Overlay {...overlayProps}>
+        { overlay }
+      </Overlay>
     );
-
-    if (this.props.rootClose) {
-      return (
-        <RootCloseWrapper onRootClose={this.hide}>
-          {overlay}
-        </RootCloseWrapper>
-      );
-    } else {
-      return overlay;
-    }
   },
 
   render() {
-    const child = React.Children.only(this.props.children);
-    if (this.props.trigger === 'manual') {
-      return child;
-    }
+    const trigger = React.Children.only(this.props.children);
+    const triggerProps = trigger.props;
 
-    const props = {};
+    const props = {
+      'aria-describedby': this.props.overlay.props.id
+    };
 
-    props.onClick = createChainedFunction(child.props.onClick, this.props.onClick);
+    // create in render otherwise owner is lost...
+    this._overlay = this.getOverlay();
+
+    props.onClick = createChainedFunction(triggerProps.onClick, this.props.onClick);
+
     if (isOneOf('click', this.props.trigger)) {
       props.onClick = createChainedFunction(this.toggle, props.onClick);
     }
 
     if (isOneOf('hover', this.props.trigger)) {
-      props.onMouseOver = createChainedFunction(this.handleDelayedShow, this.props.onMouseOver);
-      props.onMouseOut = createChainedFunction(this.handleDelayedHide, this.props.onMouseOut);
+      warning(!(this.props.trigger === 'hover'),
+        '[react-bootstrap] Specifying only the `"hover"` trigger limits the visibilty of the overlay to just mouse users. ' +
+        'Consider also including the `"focus"` trigger so that touch and keyboard only users can see the overlay as well.');
+
+      props.onMouseOver = createChainedFunction(this.handleMouseOver, this.props.onMouseOver, triggerProps.onMouseOver);
+      props.onMouseOut = createChainedFunction(this.handleMouseOut, this.props.onMouseOut, triggerProps.onMouseOut);
     }
 
     if (isOneOf('focus', this.props.trigger)) {
-      props.onFocus = createChainedFunction(this.handleDelayedShow, this.props.onFocus);
-      props.onBlur = createChainedFunction(this.handleDelayedHide, this.props.onBlur);
+      props.onFocus = createChainedFunction(this.handleDelayedShow, this.props.onFocus, triggerProps.onFocus);
+      props.onBlur = createChainedFunction(this.handleDelayedHide, this.props.onBlur, triggerProps.onBlur);
     }
 
     return cloneElement(
-      child,
+      trigger,
       props
     );
-  },
-
-  componentWillUnmount() {
-    clearTimeout(this._hoverDelay);
-  },
-
-  componentDidMount() {
-    if (this.props.defaultOverlayShown) {
-      this.updateOverlayPosition();
-    }
   },
 
   handleDelayedShow() {
@@ -162,10 +230,10 @@ const OverlayTrigger = React.createClass({
       return;
     }
 
-    this._hoverDelay = setTimeout(function() {
+    this._hoverDelay = setTimeout(() => {
       this._hoverDelay = null;
       this.show();
-    }.bind(this), delay);
+    }, delay);
   },
 
   handleDelayedHide() {
@@ -183,133 +251,25 @@ const OverlayTrigger = React.createClass({
       return;
     }
 
-    this._hoverDelay = setTimeout(function() {
+    this._hoverDelay = setTimeout(() => {
       this._hoverDelay = null;
       this.hide();
-    }.bind(this), delay);
+    }, delay);
   },
 
-  updateOverlayPosition() {
-    if (!this.isMounted()) {
-      return;
+  // Simple implementation of mouseEnter and mouseLeave.
+  // React's built version is broken: https://github.com/facebook/react/issues/4251
+  // for cases when the trigger is disabled and mouseOut/Over can cause flicker moving
+  // from one child element to another.
+  handleMouseOverOut(handler, e) {
+    let target = e.currentTarget;
+    let related = e.relatedTarget || e.nativeEvent.toElement;
+
+    if (!related || related !== target && !contains(target, related)) {
+      handler(e);
     }
-
-    this.setState(this.calcOverlayPosition());
-  },
-
-  calcOverlayPosition() {
-    const childOffset = this.getPosition();
-
-    const overlayNode = this.getOverlayDOMNode();
-    const overlayHeight = overlayNode.offsetHeight;
-    const overlayWidth = overlayNode.offsetWidth;
-
-    const placement = this.props.placement;
-    let overlayLeft, overlayTop, arrowOffsetLeft, arrowOffsetTop;
-
-    if (placement === 'left' || placement === 'right') {
-      overlayTop = childOffset.top + (childOffset.height - overlayHeight) / 2;
-
-      if (placement === 'left') {
-        overlayLeft = childOffset.left - overlayWidth;
-      } else {
-        overlayLeft = childOffset.left + childOffset.width;
-      }
-
-      const topDelta = this._getTopDelta(overlayTop, overlayHeight);
-      overlayTop += topDelta;
-      arrowOffsetTop = 50 * (1 - 2 * topDelta / overlayHeight) + '%';
-      arrowOffsetLeft = null;
-    } else if (placement === 'top' || placement === 'bottom') {
-      overlayLeft = childOffset.left + (childOffset.width - overlayWidth) / 2;
-
-      if (placement === 'top') {
-        overlayTop = childOffset.top - overlayHeight;
-      } else {
-        overlayTop = childOffset.top + childOffset.height;
-      }
-
-      const leftDelta = this._getLeftDelta(overlayLeft, overlayWidth);
-      overlayLeft += leftDelta;
-      arrowOffsetLeft = 50 * (1 - 2 * leftDelta / overlayWidth) + '%';
-      arrowOffsetTop = null;
-    } else {
-      throw new Error(
-        'calcOverlayPosition(): No such placement of "' +
-        this.props.placement + '" found.'
-      );
-    }
-
-    return {overlayLeft, overlayTop, arrowOffsetLeft, arrowOffsetTop};
-  },
-
-  _getTopDelta(top, overlayHeight) {
-    const containerDimensions = this._getContainerDimensions();
-    const containerScroll = containerDimensions.scroll;
-    const containerHeight = containerDimensions.height;
-
-    const padding = this.props.containerPadding;
-    const topEdgeOffset = top - padding - containerScroll;
-    const bottomEdgeOffset = top + padding - containerScroll + overlayHeight;
-
-    if (topEdgeOffset < 0) {
-      return -topEdgeOffset;
-    } else if (bottomEdgeOffset > containerHeight) {
-      return containerHeight - bottomEdgeOffset;
-    } else {
-      return 0;
-    }
-  },
-
-  _getLeftDelta(left, overlayWidth) {
-    const containerDimensions = this._getContainerDimensions();
-    const containerWidth = containerDimensions.width;
-
-    const padding = this.props.containerPadding;
-    const leftEdgeOffset = left - padding;
-    const rightEdgeOffset = left + padding + overlayWidth;
-
-    if (leftEdgeOffset < 0) {
-      return -leftEdgeOffset;
-    } else if (rightEdgeOffset > containerWidth) {
-      return containerWidth - rightEdgeOffset;
-    } else {
-      return 0;
-    }
-  },
-
-  _getContainerDimensions() {
-    const containerNode = this.getContainerDOMNode();
-    let width, height, scroll;
-
-    if (containerNode.tagName === 'BODY') {
-      width = window.innerWidth;
-      height = window.innerHeight;
-      scroll =
-        domUtils.ownerDocument(containerNode).documentElement.scrollTop ||
-        containerNode.scrollTop;
-    } else {
-      width = containerNode.offsetWidth;
-      height = containerNode.offsetHeight;
-      scroll = containerNode.scrollTop;
-    }
-
-    return {width, height, scroll};
-  },
-
-  getPosition() {
-    const node = React.findDOMNode(this);
-    const container = this.getContainerDOMNode();
-
-    const offset = container.tagName === 'BODY' ?
-      domUtils.getOffset(node) : domUtils.getPosition(node, container);
-
-    return {
-      ...offset, // eslint-disable-line object-shorthand
-      height: node.offsetHeight,
-      width: node.offsetWidth
-    };
   }
+
 });
 
 /**

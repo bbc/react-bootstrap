@@ -1,5 +1,6 @@
 import React from 'react';
 import classNames from 'classnames';
+import SafeAnchor from './SafeAnchor';
 
 const PageItem = React.createClass({
 
@@ -16,7 +17,9 @@ const PageItem = React.createClass({
 
   getDefaultProps() {
     return {
-      href: '#'
+      disabled: false,
+      previous: false,
+      next: false
     };
   },
 
@@ -31,20 +34,19 @@ const PageItem = React.createClass({
       <li
         {...this.props}
         className={classNames(this.props.className, classes)}>
-        <a
+        <SafeAnchor
           href={this.props.href}
           title={this.props.title}
           target={this.props.target}
-          onClick={this.handleSelect}
-          ref="anchor">
+          onClick={this.handleSelect}>
           {this.props.children}
-        </a>
+        </SafeAnchor>
       </li>
     );
   },
 
   handleSelect(e) {
-    if (this.props.onSelect) {
+    if (this.props.onSelect || this.props.disabled) {
       e.preventDefault();
 
       if (!this.props.disabled) {

@@ -4,7 +4,7 @@ import React from 'react';
  * Creates new trigger class that injects context into overlay.
  */
 export default function createContextWrapper(Trigger, propName) {
-  return function (contextTypes) {
+  return contextTypes => {
     class ContextWrapper extends React.Component {
       getChildContext() {
         return this.props.context;
@@ -12,8 +12,7 @@ export default function createContextWrapper(Trigger, propName) {
 
       render() {
         // Strip injected props from below.
-        const {wrapped, ...props} = this.props; // eslint-disable-line object-shorthand
-        delete props.context;
+        const {wrapped, context, ...props} = this.props;
 
         return React.cloneElement(wrapped, props);
       }

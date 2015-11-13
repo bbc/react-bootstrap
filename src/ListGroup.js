@@ -1,4 +1,5 @@
 import React, { cloneElement } from 'react';
+import ListGroupItem from './ListGroupItem';
 import classNames from 'classnames';
 import ValidComponentChildren from './utils/ValidComponentChildren';
 
@@ -9,40 +10,51 @@ class ListGroup extends React.Component {
       (item, index) => cloneElement(item, { key: item.key ? item.key : index })
     );
 
-    let childrenAnchors = false;
+    if (this.areCustomChildren(items)) {
+      let Component = this.props.componentClass;
+      return (
+        <Component
+          {...this.props}
+          className={classNames(this.props.className, 'list-group')}>
+          {items}
+        </Component>
+      );
+    }
+
+    let shouldRenderDiv = false;
 
     if (!this.props.children) {
-      return this.renderDiv(items);
-    } else if (React.Children.count(this.props.children) === 1 && !Array.isArray(this.props.children)) {
-      let child = this.props.children;
-
-      childrenAnchors = this.isAnchor(child.props);
-
+      shouldRenderDiv = true;
     } else {
-
-      childrenAnchors = Array.prototype.some.call(this.props.children, (child) => {
-        return !Array.isArray(child) ? this.isAnchor(child.props) : Array.prototype.some.call(child, (subChild) => {
-            return this.isAnchor(subChild.props);
-        });
-
+      ValidComponentChildren.forEach(this.props.children, (child) => {
+        if (this.isAnchorOrButton(child.props)) {
+          shouldRenderDiv = true;
+        }
       });
-
     }
 
-    if (childrenAnchors){
-      return this.renderDiv(items);
-    } else {
-      return this.renderUL(items);
-    }
+    return shouldRenderDiv ? this.renderDiv(items) : this.renderUL(items);
   }
 
-  isAnchor(props){
+  isAnchorOrButton(props) {
     return (props.href || props.onClick);
+  }
+
+  areCustomChildren(children) {
+    let customChildren = false;
+
+    ValidComponentChildren.forEach(children, (child) => {
+      if (child.type !== ListGroupItem) {
+        customChildren = true;
+      }
+    }, this);
+
+    return customChildren;
   }
 
   renderUL(items) {
     let listItems = ValidComponentChildren.map(items,
-      (item, index) => cloneElement(item, { listItem: true })
+      (item) => cloneElement(item, { listItem: true })
     );
 
     return (
@@ -65,9 +77,22 @@ class ListGroup extends React.Component {
   }
 }
 
+ListGroup.defaultProps = {
+  componentClass: 'div'
+};
+
 ListGroup.propTypes = {
   className: React.PropTypes.string,
-  id: React.PropTypes.string
+  /**
+   * The element for ListGroup if children are
+   * user-defined custom components.
+   * @type {("ul"|"div")}
+   */
+  componentClass: React.PropTypes.oneOf(['ul', 'div']),
+  id: React.PropTypes.oneOfType([
+    React.PropTypes.string,
+    React.PropTypes.number
+  ])
 };
 
 export default ListGroup;

@@ -2,8 +2,8 @@ import React from 'react';
 import ReactTestUtils from 'react/lib/ReactTestUtils';
 import Alert from '../src/Alert';
 
-describe('Alert', function () {
-  it('Should output a alert with message', function () {
+describe('Alert', () => {
+  it('Should output a alert with message', () => {
     let instance = ReactTestUtils.renderIntoDocument(
       <Alert>
         <strong>Message</strong>
@@ -12,27 +12,27 @@ describe('Alert', function () {
     assert.ok(ReactTestUtils.findRenderedDOMComponentWithTag(instance, 'strong'));
   });
 
-  it('Should have bsType by default', function () {
+  it('Should have bsType by default', () => {
     let instance = ReactTestUtils.renderIntoDocument(
       <Alert>
         Message
       </Alert>
     );
-    assert.ok(instance.getDOMNode().className.match(/\balert\b/));
+    assert.ok(React.findDOMNode(instance).className.match(/\balert\b/));
   });
 
-  it('Should have dismissable style with onDismiss', function () {
-    let noOp = function () {};
+  it('Should have dismissable style with onDismiss', () => {
+    let noOp = () => {};
     let instance = ReactTestUtils.renderIntoDocument(
       <Alert onDismiss={noOp}>
         Message
       </Alert>
     );
-    assert.ok(instance.getDOMNode().className.match(/\balert-dismissable\b/));
+    assert.ok(React.findDOMNode(instance).className.match(/\balert-dismissable\b/));
   });
 
-  it('Should call onDismiss callback on dismiss click', function (done) {
-    let doneOp = function () {
+  it('Should call onDismiss callback on dismiss click', (done) => {
+    let doneOp = () => {
       done();
     };
     let instance = ReactTestUtils.renderIntoDocument(
@@ -40,11 +40,11 @@ describe('Alert', function () {
         Message
       </Alert>
     );
-    ReactTestUtils.Simulate.click(instance.getDOMNode().children[0]);
+    ReactTestUtils.Simulate.click(React.findDOMNode(instance).children[0]);
   });
 
-  it('Should call onDismiss callback on dismissAfter time', function (done) {
-    let doneOp = function () {
+  it('Should call onDismiss callback on dismissAfter time', (done) => {
+    let doneOp = () => {
       done();
     };
     ReactTestUtils.renderIntoDocument(
@@ -54,21 +54,43 @@ describe('Alert', function () {
     );
   });
 
-  it('Should have a default bsStyle class', function () {
+  it('Should have a default bsStyle class', () => {
     let instance = ReactTestUtils.renderIntoDocument(
       <Alert>
         Message
       </Alert>
     );
-    assert.ok(instance.getDOMNode().className.match(/\balert-\w+\b/));
+    assert.ok(React.findDOMNode(instance).className.match(/\balert-\w+\b/));
   });
 
-  it('Should have use bsStyle class', function () {
+  it('Should have use bsStyle class', () => {
     let instance = ReactTestUtils.renderIntoDocument(
       <Alert bsStyle='danger'>
         Message
       </Alert>
     );
-    assert.ok(instance.getDOMNode().className.match(/\balert-danger\b/));
+    assert.ok(React.findDOMNode(instance).className.match(/\balert-danger\b/));
+  });
+
+  describe('Web Accessibility', () => {
+    it('Should have alert role', () => {
+      let instance = ReactTestUtils.renderIntoDocument(
+        <Alert>Message</Alert>
+      );
+
+      assert.equal(React.findDOMNode(instance).getAttribute('role'), 'alert');
+    });
+
+    it('Should call onDismiss callback when the sr-only dismiss link is activated', (done) => {
+      let doneOp = () => {
+        done();
+      };
+      let instance = ReactTestUtils.renderIntoDocument(
+        <Alert onDismiss={doneOp}>
+          Message
+        </Alert>
+      );
+      ReactTestUtils.Simulate.click(React.findDOMNode(instance).getElementsByClassName('sr-only')[0]);
+    });
   });
 });

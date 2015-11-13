@@ -2,7 +2,6 @@ import React, { cloneElement } from 'react';
 import BootstrapMixin from './BootstrapMixin';
 import classNames from 'classnames';
 
-
 const ListGroupItem = React.createClass({
   mixins: [BootstrapMixin],
 
@@ -14,14 +13,13 @@ const ListGroupItem = React.createClass({
     header: React.PropTypes.node,
     listItem: React.PropTypes.bool,
     onClick: React.PropTypes.func,
-    eventKey: React.PropTypes.any,
-    href: React.PropTypes.string,
-    target: React.PropTypes.string
+    href: React.PropTypes.string
   },
 
   getDefaultProps() {
     return {
-      bsClass: 'list-group-item'
+      bsClass: 'list-group-item',
+      listItem: false
     };
   },
 
@@ -31,13 +29,14 @@ const ListGroupItem = React.createClass({
     classes.active = this.props.active;
     classes.disabled = this.props.disabled;
 
-    if (this.props.href || this.props.onClick) {
+    if (this.props.href) {
       return this.renderAnchor(classes);
+    } else if (this.props.onClick) {
+      return this.renderButton(classes);
     } else if (this.props.listItem) {
       return this.renderLi(classes);
-    } else {
-      return this.renderSpan(classes);
     }
+    return this.renderSpan(classes);
   },
 
   renderLi(classes) {
@@ -60,6 +59,17 @@ const ListGroupItem = React.createClass({
     );
   },
 
+  renderButton(classes) {
+    return (
+      <button
+        type="button"
+        {...this.props}
+        className={classNames(this.props.className, classes)}>
+        {this.props.header ? this.renderStructuredContent() : this.props.children}
+      </button>
+    );
+  },
+
   renderSpan(classes) {
     return (
       <span
@@ -78,14 +88,14 @@ const ListGroupItem = React.createClass({
       });
     } else {
       header = (
-        <h4 key='header' className="list-group-item-heading">
+        <h4 key="header" className="list-group-item-heading">
           {this.props.header}
         </h4>
       );
     }
 
     let content = (
-      <p key='content' className="list-group-item-text">
+      <p key="content" className="list-group-item-text">
         {this.props.children}
       </p>
     );

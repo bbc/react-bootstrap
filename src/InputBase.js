@@ -1,6 +1,7 @@
 import React from 'react';
 import classNames from 'classnames';
 import FormGroup from './FormGroup';
+import Glyphicon from './Glyphicon';
 
 class InputBase extends React.Component {
   getInputDOMNode() {
@@ -13,12 +14,10 @@ class InputBase extends React.Component {
     } else if (this.props.type) {
       if (this.props.type === 'select' && this.props.multiple) {
         return this.getSelectedOptions();
-      } else {
-        return this.getInputDOMNode().value;
       }
-    } else {
-      throw 'Cannot use getValue without specifying input type.';
+      return this.getInputDOMNode().value;
     }
+    throw new Error('Cannot use getValue without specifying input type.');
   }
 
   getChecked() {
@@ -75,8 +74,9 @@ class InputBase extends React.Component {
 
     let inputGroupClassName;
     switch (this.props.bsSize) {
-      case 'small': inputGroupClassName = 'input-group-sm'; break;
-      case 'large': inputGroupClassName = 'input-group-lg'; break;
+    case 'small': inputGroupClassName = 'input-group-sm'; break;
+    case 'large': inputGroupClassName = 'input-group-lg'; break;
+    default:
     }
 
     return addonBefore || addonAfter || buttonBefore || buttonAfter ? (
@@ -91,17 +91,20 @@ class InputBase extends React.Component {
   }
 
   renderIcon() {
-    let classes = {
-      'glyphicon': true,
-      'form-control-feedback': true,
-      'glyphicon-ok': this.props.bsStyle === 'success',
-      'glyphicon-warning-sign': this.props.bsStyle === 'warning',
-      'glyphicon-remove': this.props.bsStyle === 'error'
-    };
+    if (this.props.hasFeedback) {
+      if (this.props.feedbackIcon) {
+        return React.cloneElement(this.props.feedbackIcon, { formControlFeedback: true });
+      }
 
-    return this.props.hasFeedback ? (
-      <span className={classNames(classes)} key="icon" />
-    ) : null;
+      switch (this.props.bsStyle) {
+      case 'success': return <Glyphicon formControlFeedback glyph="ok" key="icon" />;
+      case 'warning': return <Glyphicon formControlFeedback glyph="warning-sign" key="icon" />;
+      case 'error': return <Glyphicon formControlFeedback glyph="remove" key="icon" />;
+      default: return <span className="form-control-feedback" key="icon" />;
+      }
+    } else {
+      return null;
+    }
   }
 
   renderHelp() {
@@ -153,24 +156,24 @@ class InputBase extends React.Component {
     }
 
     switch (this.props.type) {
-      case 'select':
-        return (
-          <select {...this.props} className={classNames(this.props.className, 'form-control')} ref="input" key="input">
-            {this.props.children}
-          </select>
-        );
-      case 'textarea':
-        return <textarea {...this.props} className={classNames(this.props.className, 'form-control')} ref="input" key="input" />;
-      case 'static':
-        return (
-          <p {...this.props} className={classNames(this.props.className, 'form-control-static')} ref="input" key="input">
-            {this.props.value}
-          </p>
-        );
+    case 'select':
+      return (
+        <select {...this.props} className={classNames(this.props.className, 'form-control')} ref="input" key="input">
+          {this.props.children}
+        </select>
+      );
+    case 'textarea':
+      return <textarea {...this.props} className={classNames(this.props.className, 'form-control')} ref="input" key="input" />;
+    case 'static':
+      return (
+        <p {...this.props} className={classNames(this.props.className, 'form-control-static')} ref="input" key="input">
+          {this.props.value}
+        </p>
+      );
+    default:
+      const className = this.isCheckboxOrRadio() || this.isFile() ? '' : 'form-control';
+      return <input {...this.props} className={classNames(this.props.className, className)} ref="input" key="input" />;
     }
-
-    let className = this.isCheckboxOrRadio() || this.isFile() ? '' : 'form-control';
-    return <input {...this.props} className={classNames(this.props.className, className)} ref="input" key="input" />;
   }
 
   renderFormGroup(children) {
@@ -214,13 +217,23 @@ InputBase.propTypes = {
   bsSize: React.PropTypes.oneOf(['small', 'medium', 'large']),
   bsStyle: React.PropTypes.oneOf(['success', 'warning', 'error']),
   hasFeedback: React.PropTypes.bool,
-  id: React.PropTypes.string,
+  feedbackIcon: React.PropTypes.node,
+  id: React.PropTypes.oneOfType([
+    React.PropTypes.string,
+    React.PropTypes.number
+  ]),
   groupClassName: React.PropTypes.string,
   wrapperClassName: React.PropTypes.string,
   labelClassName: React.PropTypes.string,
   multiple: React.PropTypes.bool,
   disabled: React.PropTypes.bool,
   value: React.PropTypes.any
+};
+
+InputBase.defaultProps = {
+  disabled: false,
+  hasFeedback: false,
+  multiple: false
 };
 
 export default InputBase;

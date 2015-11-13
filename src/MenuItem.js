@@ -1,63 +1,95 @@
 import React from 'react';
-import classNames from 'classnames';
+import classnames from 'classnames';
+import all from 'react-prop-types/lib/all';
+import SafeAnchor from './SafeAnchor';
 
-const MenuItem = React.createClass({
-  propTypes: {
-    header:    React.PropTypes.bool,
-    divider:   React.PropTypes.bool,
-    href:      React.PropTypes.string,
-    title:     React.PropTypes.string,
-    target:    React.PropTypes.string,
-    onSelect:  React.PropTypes.func,
-    eventKey:  React.PropTypes.any,
-    active:    React.PropTypes.bool,
-    tabIndex:  React.PropTypes.string
-  },
+export default class MenuItem extends React.Component {
+  constructor(props) {
+    super(props);
 
-  getDefaultProps() {
-    return {
-      href: '#',
-      active: false,
-      tabIndex: null
-    };
-  },
+    this.handleClick = this.handleClick.bind(this);
+  }
 
-  handleClick(e) {
-    if (this.props.onSelect) {
-      e.preventDefault();
-      this.props.onSelect(this.props.eventKey, this.props.href, this.props.target);
+  handleClick(event) {
+    if (!this.props.href || this.props.disabled) {
+      event.preventDefault();
     }
-  },
 
-  renderAnchor() {
-    return (
-      <a onClick={this.handleClick} href={this.props.href} target={this.props.target} title={this.props.title} tabIndex={this.props.tabIndex} role="menuitem">
-        {this.props.children}
-      </a>
-    );
-  },
+    if (this.props.disabled) {
+      return;
+    }
+
+    if (this.props.onSelect) {
+      this.props.onSelect(event, this.props.eventKey);
+    }
+  }
 
   render() {
-    let classes = {
-        'dropdown-header': this.props.header,
-        'divider': this.props.divider,
-        'active': this.props.active
-      };
-
-    let children = null;
-    if (this.props.header) {
-      children = this.props.children;
-    } else if (!this.props.divider) {
-      children = this.renderAnchor();
+    if (this.props.divider) {
+      return <li role="separator" className="divider" />;
     }
 
+    if (this.props.header) {
+      return (
+        <li role="heading" className="dropdown-header">{this.props.children}</li>
+      );
+    }
+
+    const classes = {
+      disabled: this.props.disabled,
+      active: this.props.active
+    };
+
     return (
-      <li {...this.props} role="presentation" title={null} href={null}
-        className={classNames(this.props.className, classes)}>
-        {children}
+      <li role="presentation"
+        className={classnames(this.props.className, classes)}
+        style={this.props.style}
+      >
+        <SafeAnchor
+          role="menuitem"
+          tabIndex="-1"
+          id={this.props.id}
+          target={this.props.target}
+          title={this.props.title}
+          href={this.props.href || ''}
+          onKeyDown={this.props.onKeyDown}
+          onClick={this.handleClick}>
+          {this.props.children}
+        </SafeAnchor>
       </li>
     );
   }
-});
+}
 
-export default MenuItem;
+MenuItem.propTypes = {
+  active: React.PropTypes.bool,
+  disabled: React.PropTypes.bool,
+  divider: all(
+    React.PropTypes.bool,
+    props => {
+      if (props.divider && props.children) {
+        return new Error('Children will not be rendered for dividers');
+      }
+    }
+  ),
+  eventKey: React.PropTypes.oneOfType([
+    React.PropTypes.number,
+    React.PropTypes.string
+  ]),
+  header: React.PropTypes.bool,
+  href: React.PropTypes.string,
+  target: React.PropTypes.string,
+  title: React.PropTypes.string,
+  onKeyDown: React.PropTypes.func,
+  onSelect: React.PropTypes.func,
+  id: React.PropTypes.oneOfType([
+    React.PropTypes.string,
+    React.PropTypes.number
+  ])
+};
+
+MenuItem.defaultProps = {
+  divider: false,
+  disabled: false,
+  header: false
+};
